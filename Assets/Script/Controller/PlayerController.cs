@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 3f;
+    [SerializeField] private PickupIconManager iconManager;  // Reference to icon manager
     private Vector2 movementInput;
     private Rigidbody2D rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0;  
+        rb.gravityScale = 0;
     }
 
     void Update()
@@ -42,12 +41,23 @@ public class PlayerController : MonoBehaviour
     {
         if (movementInput.x < 0)
         {
-            transform.localScale = new Vector3(-transform.localScale.x, -transform.localScale.y, -transform.localScale.z);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
         else if (movementInput.x > 0)
         {
-            transform.localScale = new Vector3(transform.localScale.x, -transform.localScale.y, -transform.localScale.z);
-
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
+    }
+
+    // Call this method to show the pickup icon
+    public void ShowPickupIcon(Sprite icon)
+    {
+        iconManager.ShowIcon(icon, transform);
+    }
+
+    // Call this method to hide the pickup icon
+    public void HidePickupIcon()
+    {
+        iconManager.HideIcon();
     }
 }
