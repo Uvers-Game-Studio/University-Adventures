@@ -1,18 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ProgressBarManager : MonoBehaviour
+public class ProgressBar : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Slider progressBar;
+    public float duration = 3f; // Duration to reach zero
+    private bool isProgressActive = false;
+
     void Start()
     {
-        
+        if (progressBar != null)
+        {
+            progressBar.value = 1; 
+            progressBar.gameObject.SetActive(false); 
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (isProgressActive && progressBar.value > 0)
+        {
+            // Calculate how much to decrease per frame
+            progressBar.value -= Time.deltaTime / duration;
+
+            // Stop progress if it reaches zero
+            if (progressBar.value <= 0)
+            {
+                progressBar.value = 0;
+                isProgressActive = false;
+                Destroy(progressBar.gameObject);
+            }
+        }
+    }
+
+    public void StartProgress()
+    {
+        if (progressBar != null)
+        {
+            progressBar.gameObject.SetActive(true); 
+            progressBar.value = 1; 
+            isProgressActive = true;
+        }
     }
 }
