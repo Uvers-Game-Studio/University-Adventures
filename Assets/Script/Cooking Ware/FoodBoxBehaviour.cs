@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FoodBoxBehaviour : MonoBehaviour
 {
-    [SerializeField] private Sprite foodIcon;  // The icon to display when picked up
+    [SerializeField] private GameObject iconPrefab; 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -11,9 +11,8 @@ public class FoodBoxBehaviour : MonoBehaviour
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.ShowPickupIcon(foodIcon);  // Show the icon above the player
+                player.ShowPickupIcon(iconPrefab);  
                 Debug.Log("Player picked up food!");
-                // Optionally destroy the food box or handle further logic here
             }
         }
     }
