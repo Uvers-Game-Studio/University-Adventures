@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 3f;
-    [SerializeField] private PickupIconManager iconManager;  // Reference to icon manager
+    [SerializeField] private PickupIconManager iconManager;  // Reference to the icon manager
     private Vector2 movementInput;
     private Rigidbody2D rb;
 
@@ -49,13 +49,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Call this method to show the pickup icon
-    public void ShowPickupIcon(Sprite icon)
+    public void ShowPickupIcon(GameObject iconPrefab)
     {
-        iconManager.ShowIcon(icon, transform);
+        iconManager.ShowIcon(iconPrefab, transform);  // Pass the prefab and player's transform to the icon manager
     }
 
-    // Call this method to hide the pickup icon
     public void HidePickupIcon()
     {
         iconManager.HideIcon();
