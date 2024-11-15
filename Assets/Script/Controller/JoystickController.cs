@@ -22,13 +22,17 @@ public class JoystickController : MonoBehaviour {
 
     private void MovePlayer() {
         Vector2 movement = movementJoystick.Direction;
+
         if (movement != Vector2.zero) {
             rb.velocity = movement * playerSpeed;
+
             FaceDirection(movement);
-            // PlayAnimation("isWalking", true);
+
+            PlayAnimation("isWalking", true);
         } else {
             rb.velocity = Vector2.zero;
-            // PlayAnimation("isWalking", false);
+
+            PlayAnimation("isWalking", false);
         }
     }
 
