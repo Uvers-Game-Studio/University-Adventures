@@ -4,7 +4,7 @@ public class PlayerObjectDetection : MonoBehaviour
 {
     public UIManager uiManager; // Reference to the UIManager
     public PlayerItemDisplay itemDisplay; // Reference to PlayerItemDisplay
-    private bool isNearCookingWare = false; // Tracks if player is near cookingware
+    private FoodBox currentFoodBox; // Reference to the currently detected food box
 
     private void Start()
     {
@@ -21,27 +21,36 @@ public class PlayerObjectDetection : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("CookingWare"))
+        if (collision.gameObject.CompareTag("FoodBox"))
         {
-            isNearCookingWare = true;
-            uiManager?.UpdateButtonText("Take \nItem"); // Update button text
+            currentFoodBox = collision.gameObject.GetComponent<FoodBox>();
+
+            if (currentFoodBox != null)
+            {
+                uiManager?.UpdateButtonText("Take \nItem"); // Update the button text
+            }
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("CookingWare"))
+        if (collision.gameObject.CompareTag("FoodBox"))
         {
-            isNearCookingWare = false;
-            uiManager?.ResetButtonText(); // Reset button text
+            currentFoodBox = null; // Clear the reference
+            uiManager?.ResetButtonText(); // Reset the button text
         }
     }
 
     public void OnTakeItemButtonPressed()
     {
-        if (isNearCookingWare)
+        if (currentFoodBox != null)
         {
-            itemDisplay?.ShowFishIcon(); // Show fish icon
+            Sprite foodSprite = currentFoodBox.GetFoodSprite();
+            if (foodSprite != null)
+            {
+                itemDisplay?.SetFishSprite(foodSprite); // Update the sprite in PlayerItemDisplay
+                itemDisplay?.ShowPickupIcon(); // Show the sprite
+            }
         }
     }
 }

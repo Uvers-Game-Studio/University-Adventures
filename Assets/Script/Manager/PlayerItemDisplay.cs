@@ -3,35 +3,41 @@ using UnityEngine.UI;
 
 public class PlayerItemDisplay : MonoBehaviour
 {
-    public Image fishIcon;         
-    public Sprite fishSprite;      
+    public Image fishIcon;
 
     private void Start()
     {
-        if (fishIcon != null && fishSprite != null)
+        if (fishIcon != null)
         {
-            fishIcon.sprite = fishSprite; 
-            fishIcon.enabled = false;    
+            fishIcon.enabled = false; // Start hidden
         }
         else
         {
-            Debug.LogError("Fish icon or sprite is not assigned!");
+            Debug.LogError("Fish icon is not assigned!");
         }
     }
 
-    public void ShowFishIcon()
+    public void SetFishSprite(Sprite newSprite)
     {
         if (fishIcon != null)
         {
-            fishIcon.enabled = true; // Show the Image
+            fishIcon.sprite = newSprite; // Update the sprite
         }
     }
 
-    public void HideFishIcon()
+    public void ShowPickupIcon()
     {
         if (fishIcon != null)
         {
-            fishIcon.enabled = false; // Hide the Image
+            fishIcon.enabled = true; // Show the image
+        }
+    }
+
+    public void HidePickupIcon()
+    {
+        if (fishIcon != null)
+        {
+            fishIcon.enabled = false; // Hide the image
         }
     }
 }
