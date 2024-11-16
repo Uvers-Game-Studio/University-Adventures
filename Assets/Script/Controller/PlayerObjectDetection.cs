@@ -48,7 +48,7 @@ public class PlayerObjectDetection : MonoBehaviour
             Sprite foodSprite = currentFoodBox.GetFoodSprite();
             if (foodSprite != null)
             {
-                itemDisplay?.SetFishSprite(foodSprite); // Update the sprite in PlayerItemDisplay
+                itemDisplay?.SetIconSprite(foodSprite); // Update the sprite in PlayerItemDisplay
                 itemDisplay?.ShowPickupIcon(); // Show the sprite
             }
         }

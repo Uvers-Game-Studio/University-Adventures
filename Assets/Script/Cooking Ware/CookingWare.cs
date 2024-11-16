@@ -4,26 +4,23 @@ using System.Collections;
 public class CookingWare : MonoBehaviour
 {
 
-    public string actionType;     // Defines what action this cookingware will trigger
-    public bool isActive = false; // Flag to check if cookingware is active
+    public string actionType;     
+    public bool isActive = false; 
 
-
-
-    // Method to trigger the action based on cookingWareID
     public void TriggerAction()
     {
  
         if (actionType == "Cut")
         {
-            StartCoroutine(CuttingAction(3f)); // Cutting takes 3 seconds
+            StartCoroutine(CuttingAction(3f)); 
         }
         else if (actionType == "Fry")
         {
-            StartCoroutine(FryingAction(5f)); // Frying takes 5 seconds
+            StartCoroutine(FryingAction(5f)); 
         }
         else if (actionType == "AddSauce")
         {
-            StartCoroutine(AddSauceAction(1f)); // Adding sauce takes 1 second
+            StartCoroutine(AddSauceAction(1f)); 
         }
     }
 

@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class PlayerItemDisplay : MonoBehaviour
 {
-    public Image fishIcon;
+    public Image pickupIcon;
 
     private void Start()
     {
-        if (fishIcon != null)
+        if (pickupIcon != null)
         {
-            fishIcon.enabled = false; // Start hidden
+            pickupIcon.enabled = false; // Start hidden
         }
         else
         {
@@ -17,27 +17,27 @@ public class PlayerItemDisplay : MonoBehaviour
         }
     }
 
-    public void SetFishSprite(Sprite newSprite)
+    public void SetIconSprite(Sprite newSprite)
     {
-        if (fishIcon != null)
+        if (pickupIcon != null)
         {
-            fishIcon.sprite = newSprite; // Update the sprite
+            pickupIcon.sprite = newSprite; // Update the sprite
         }
     }
 
     public void ShowPickupIcon()
     {
-        if (fishIcon != null)
+        if (pickupIcon != null)
         {
-            fishIcon.enabled = true; // Show the image
+            pickupIcon.enabled = true; // Show the image
         }
     }
 
     public void HidePickupIcon()
     {
-        if (fishIcon != null)
+        if (pickupIcon != null)
         {
-            fishIcon.enabled = false; // Hide the image
+            pickupIcon.enabled = false; // Hide the image
         }
     }
 }
