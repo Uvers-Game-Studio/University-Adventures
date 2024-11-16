@@ -1,10 +1,19 @@
 using UnityEngine;
-using TMPro; // Import TextMeshPro namespace
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public TextMeshProUGUI buttonText;
+    public TextMeshProUGUI buttonText; // Button text UI
     public string defaultText = "Null"; 
+    public PlayerObjectDetection objectDetection; 
+
+    private void Start()
+    {
+        if (objectDetection == null)
+        {
+            Debug.LogError("PlayerObjectDetection is not assigned!");
+        }
+    }
 
     public void UpdateButtonText(string newText)
     {
@@ -14,13 +23,17 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Button TextMeshProUGUI is not assigned in UIManager!");
+            Debug.LogError("Button TextMeshProUGUI is not assigned!");
         }
     }
-
 
     public void ResetButtonText()
     {
         UpdateButtonText(defaultText);
+    }
+
+    public void OnButtonPressed()
+    {
+        objectDetection?.OnTakeItemButtonPressed(); // Notify detection script
     }
 }
