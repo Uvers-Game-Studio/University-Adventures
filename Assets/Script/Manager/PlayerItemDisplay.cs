@@ -21,6 +21,8 @@ public class PlayerItemDisplay : MonoBehaviour
     {
         if (pickupIcon != null)
         {
+            ClearIconSprite();
+            pickupIcon.gameObject.SetActive(true);  
             pickupIcon.sprite = newSprite; // Update the sprite
         }
     }
@@ -33,11 +35,12 @@ public class PlayerItemDisplay : MonoBehaviour
         }
     }
 
-    public void HidePickupIcon()
+    public void ClearIconSprite()
     {
         if (pickupIcon != null)
         {
-            pickupIcon.enabled = false; // Hide the image
+            pickupIcon.sprite = null;  // Remove the sprite from the Image
+            pickupIcon.gameObject.SetActive(false);  // Optionally hide the image as well
         }
     }
 }

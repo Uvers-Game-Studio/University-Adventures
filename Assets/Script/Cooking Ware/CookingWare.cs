@@ -1,54 +1,87 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CookingWare : MonoBehaviour
 {
+    private Canvas cookingWareCanvas;
+    private Image canvasImage;
+    private bool completeProcess = false;
+    private Slider canvasSlider;
+    private PlayerObjectDetection playerObjectDetection;
 
-    public string actionType;     
-    public bool isActive = false; 
-
-    public void TriggerAction()
+    private void Start()
     {
- 
-        if (actionType == "Cut")
+        playerObjectDetection = GameObject.Find("Character").GetComponent<PlayerObjectDetection>();
+        // Find the Canvas component in the child objects of this GameObject
+        cookingWareCanvas = GetComponentInChildren<Canvas>();
+
+        if (cookingWareCanvas != null)
         {
-            StartCoroutine(CuttingAction(3f)); 
+            // Find the Image and Slider components in the child objects of the Canvas
+            canvasImage = cookingWareCanvas.GetComponentInChildren<Image>();
+            canvasSlider = cookingWareCanvas.GetComponentInChildren<Slider>();
+
+            // Disable the Image and Slider at the start
+            if (canvasImage != null)
+            {
+                canvasImage.gameObject.SetActive(false);
+            }
+            else
+            {
+                Debug.LogWarning("No Image found under the CookingWare Canvas.");
+            }
+
+            if (canvasSlider != null)
+            {
+                canvasSlider.gameObject.SetActive(false);
+            }
+            else
+            {
+                Debug.LogWarning("No Slider found under the CookingWare Canvas.");
+            }
         }
-        else if (actionType == "Fry")
+        else
         {
-            StartCoroutine(FryingAction(5f)); 
+            Debug.LogWarning("No Canvas found for this CookingWare object.");
         }
-        else if (actionType == "AddSauce")
+
+    }
+
+
+    public void CookingWareProcess(float duration)
+    {
+        if (canvasSlider != null)
         {
-            StartCoroutine(AddSauceAction(1f)); 
+            canvasSlider.gameObject.SetActive(true); // Show the slider
+            canvasImage.gameObject.SetActive(false);  // Optionally show the image
+            StartCoroutine(RunSlider(duration));
+            completeProcess = true;
+            playerObjectDetection.hasCollectedItem = false;
         }
     }
 
-    // Cutting action with a 3-second delay
-    private IEnumerator CuttingAction(float duration)
+
+    private IEnumerator RunSlider(float duration)
     {
-        yield return new WaitForSeconds(duration);
-        // You can add further logic here to handle the result of cutting
+        canvasSlider.value = 0; // Reset the slider
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            canvasSlider.value = Mathf.Clamp01(elapsedTime / duration); // Update slider value
+            yield return null;
+        }
+
+        canvasSlider.value = 1; // Ensure the slider is full at the end
+        yield return new WaitForSeconds(0.5f); // Optional delay before hiding
+        canvasSlider.gameObject.SetActive(false); // Hide the slider
+        canvasImage.gameObject.SetActive(true);  // Optionally hide the image
     }
 
-    // Frying action with a 5-second delay
-    private IEnumerator FryingAction(float duration)
+    public bool getCompleteProcess()
     {
-        yield return new WaitForSeconds(duration);
-        // You can add further logic here to handle the result of frying
-    }
-
-    // Heating action with a 3-second delay
-    private IEnumerator HeatingAction(float duration)
-    {
-        yield return new WaitForSeconds(duration);
-        // You can add further logic here to handle the result of heating
-    }
-
-    // Adding sauce action with a 1-second delay
-    private IEnumerator AddSauceAction(float duration)
-    {
-        yield return new WaitForSeconds(duration);
-        // You can add further logic here to handle the result of adding sauce
+        return completeProcess;
     }
 }
