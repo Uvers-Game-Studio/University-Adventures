@@ -19,6 +19,7 @@ public class PlayerItemDisplay : MonoBehaviour
 
     public void SetIconSprite(Sprite newSprite)
     {
+        print("set icon sprite");
         if (pickupIcon != null)
         {
             ClearIconSprite();

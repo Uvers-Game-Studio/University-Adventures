@@ -1,119 +1,137 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerObjectDetection : MonoBehaviour
 {
-    public UIManager uiManager; // Reference to the UIManager
-    public PlayerItemDisplay itemDisplay; // Reference to PlayerItemDisplay
-    private FoodBox currentFoodBox; // Reference to the currently detected food box
-    private CookingWare currentCookingWare; // Reference to the currently detected cooking ware
-    public bool hasCollectedItem = false; // Flag to track if the player has collected an item
+    private bool hasCollectedItem = false;
+    private CookingWare currentCookingWare;
+    private FoodBox currentFoodBox;
+    private UIManager uiManager;
+    public PlayerItemDisplay playerItemDisplay;
+    private String foodName = string.Empty;
+    private List<string> inventory = new List<string>();
 
-    private String foodName;
+    // Mapping tags to actions
+    private Dictionary<string, System.Action> interactionActions;
 
     private void Start()
     {
-        if (uiManager == null)
-        {
-            Debug.LogError("UIManager is not assigned!");
-        }
-
-        if (itemDisplay == null)
-        {
-            Debug.LogError("PlayerItemDisplay is not assigned!");
-        }
+        uiManager = FindObjectOfType<UIManager>();
+        InitializeInteractionActions();
     }
 
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void InitializeInteractionActions()
     {
-        if (collision.gameObject.CompareTag("FoodBox"))
+        interactionActions = new Dictionary<string, System.Action>
+        {
+            { "Fryer", () => HandleCookingWareInteraction("Fry", "Bread") },
+            { "CuttingPlace", () => HandleCookingWareInteraction("Cut", "Cheese") },
+            // Add more mappings as needed
+        };
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        string tag = collision.gameObject.tag;
+        if (tag == "FoodBox")
         {
             currentFoodBox = collision.gameObject.GetComponent<FoodBox>();
             foodName = currentFoodBox.GetFoodSpriteName();
-
-
             if (currentFoodBox != null)
             {
                 uiManager?.UpdateButtonText("Take \nItem"); // Update the button text
             }
         }
+        else if (interactionActions.ContainsKey(tag))
+        {
+            print("detect collider cookingware");
 
-        else if (collision.gameObject.CompareTag("Fryer"))
-        {
             currentCookingWare = collision.gameObject.GetComponent<CookingWare>();
-            Debug.Log("Food : " + foodName);
-            if (hasCollectedItem && !currentCookingWare.getCompleteProcess())
-            {
-                if (foodName == "Bread")
-                {
-                    uiManager?.UpdateButtonText("Fry");
-                }
-            } else if(!hasCollectedItem && currentCookingWare.getCompleteProcess()){
-                uiManager?.UpdateButtonText("Take\n" + foodName);
-            }
-        }
-        else if (collision.gameObject.CompareTag("Cutting Place"))
-        {
-            currentCookingWare = collision.gameObject.GetComponent<CookingWare>();
-            if (hasCollectedItem && !currentCookingWare.getCompleteProcess())
-            {
-                if (foodName == "Cheese")
-                {
-                    uiManager?.UpdateButtonText("Cut");
-                }
-            } else if(!hasCollectedItem && currentCookingWare.getCompleteProcess()){
-                uiManager?.UpdateButtonText("Take\n" + foodName);
-            }
+            interactionActions[tag].Invoke();
         }
     }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
+        string tag = collision.gameObject.tag;
         if (collision.gameObject.CompareTag("FoodBox"))
         {
             currentFoodBox = null; // Clear the reference
             uiManager?.ResetButtonText();
         }
-        else if (collision.gameObject.CompareTag("Fryer") || collision.gameObject.CompareTag("Cutting Place"))
+        else if (interactionActions.ContainsKey(tag))
         {
             currentCookingWare = null; // Clear the reference
             uiManager?.ResetButtonText();
         }
     }
 
+
+    private void HandleCookingWareInteraction(string actionText, string requiredFoodName)
+    {
+        Debug.Log("Food: " + foodName);
+
+        if (hasCollectedItem && !currentCookingWare.getCompleteProcess())
+        {
+            if (foodName == requiredFoodName)
+            {
+                uiManager?.UpdateButtonText(actionText);
+            }
+
+            print("collectitem : " + hasCollectedItem + "getcompleteprocess : " + currentCookingWare.getCompleteProcess());
+        }
+        else if (!hasCollectedItem && currentCookingWare.getCompleteProcess())
+        {
+            uiManager?.UpdateButtonText($"Take\n{foodName}");
+        }
+    }
+
     public void OnTakeItemButtonPressed()
     {
-        if (currentFoodBox != null)
+        if (currentFoodBox != null && !hasCollectedItem)
         {
-            Sprite foodSprite = currentFoodBox.GetFoodSprite();
+            Sprite foodSprite = currentFoodBox.GetFoodSprite(); // Get the sprite of the collected food
             if (foodSprite != null)
             {
-                string spriteName = currentFoodBox.GetFoodSpriteName(); // Get the sprite name
-                Debug.Log($"Collected item: {spriteName}"); // Log the name of the sprite
+                Debug.Log($"Collected item: {foodName}"); // Log the collected food item
 
-                itemDisplay?.SetIconSprite(foodSprite); // Update the sprite in PlayerItemDisplay
-                itemDisplay?.ShowPickupIcon(); // Show the sprite
-                hasCollectedItem = true; // Mark that the player has collected an item
+                playerItemDisplay?.SetIconSprite(foodSprite); // Set the sprite in PlayerItemDisplay
+                playerItemDisplay?.ShowPickupIcon(); // Show the sprite icon
+                hasCollectedItem = true; // Mark that the player has collected the item
                 uiManager?.ResetButtonText(); // Reset button text after taking an item
             }
         }
         else if (currentCookingWare != null && hasCollectedItem)
         {
+            hasCollectedItem = false;
+            uiManager?.ResetButtonText();
             if (currentCookingWare.CompareTag("Fryer"))
             {
-                currentCookingWare.CookingWareProcess(5f);
-                itemDisplay?.ClearIconSprite();
-
+                currentCookingWare.StartProcessing(foodName);
+                playerItemDisplay?.ClearIconSprite();
             }
             else if (currentCookingWare.CompareTag("Cutting Place"))
             {
-                currentCookingWare.CookingWareProcess(3f);
-                itemDisplay?.ClearIconSprite();
+                currentCookingWare.StartProcessing(foodName);
+                playerItemDisplay?.ClearIconSprite();
             }
+        }
+        else if (currentCookingWare != null && !hasCollectedItem && currentCookingWare.getCompleteProcess())
+        {
+            Sprite foodSprite = currentCookingWare.GetFoodSprite();
+            inventory.Add(foodName);
+            Debug.Log($"Inventory: {string.Join(", ", inventory)}");
+            currentCookingWare.takeCookinWareItem();
+
+            playerItemDisplay.SetIconSprite(foodSprite);
+            playerItemDisplay.ShowPickupIcon();
+
         }
         else
         {
             Debug.LogWarning("You need to collect an item before processing.");
         }
     }
+
 }
