@@ -10,6 +10,11 @@ TagManager:
   - Cutting Place
   - Cheese Box
   - Bread Box
+  - Outdoor
+  - lobby1
+  - lobby2
+  - Kitchen
+  - Canteen
   layers:
   - Default
   - TransparentFX
