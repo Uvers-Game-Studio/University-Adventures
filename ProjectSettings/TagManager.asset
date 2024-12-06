@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CookingWare
+  - FoodBox
+  - Fryer
+  - Cutting Place
+  - Cheese Box
+  - Bread Box
   layers:
   - Default
   - TransparentFX
