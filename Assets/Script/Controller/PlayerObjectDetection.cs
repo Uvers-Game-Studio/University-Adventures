@@ -26,18 +26,21 @@ public class PlayerObjectDetection : MonoBehaviour
         interactionActions = new Dictionary<string, System.Action>
         {
             { "Fryer", () => HandleCookingWareInteraction("Fry", "Bread") },
-            { "CuttingPlace", () => HandleCookingWareInteraction("Cut", "Cheese") },
+            { "Cutting Place", () => HandleCookingWareInteraction("Cut", "Cheese") },
             // Add more mappings as needed
         };
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        
         string tag = collision.gameObject.tag;
         if (tag == "FoodBox")
         {
             currentFoodBox = collision.gameObject.GetComponent<FoodBox>();
             foodName = currentFoodBox.GetFoodSpriteName();
+            // print("current food box " + currentFoodBox);
+
             if (currentFoodBox != null)
             {
                 uiManager?.UpdateButtonText("Take \nItem"); // Update the button text
@@ -45,10 +48,10 @@ public class PlayerObjectDetection : MonoBehaviour
         }
         else if (interactionActions.ContainsKey(tag))
         {
-            print("detect collider cookingware");
-
+            
             currentCookingWare = collision.gameObject.GetComponent<CookingWare>();
             interactionActions[tag].Invoke();
+            print("collectitem : " + hasCollectedItem + " getcompleteprocess : " + currentCookingWare.getCompleteProcess() + " cookingware " + currentCookingWare);
         }
     }
 
@@ -57,7 +60,7 @@ public class PlayerObjectDetection : MonoBehaviour
         string tag = collision.gameObject.tag;
         if (collision.gameObject.CompareTag("FoodBox"))
         {
-            currentFoodBox = null; // Clear the reference
+            currentFoodBox = null;
             uiManager?.ResetButtonText();
         }
         else if (interactionActions.ContainsKey(tag))
@@ -78,8 +81,6 @@ public class PlayerObjectDetection : MonoBehaviour
             {
                 uiManager?.UpdateButtonText(actionText);
             }
-
-            print("collectitem : " + hasCollectedItem + "getcompleteprocess : " + currentCookingWare.getCompleteProcess());
         }
         else if (!hasCollectedItem && currentCookingWare.getCompleteProcess())
         {
@@ -94,7 +95,7 @@ public class PlayerObjectDetection : MonoBehaviour
             Sprite foodSprite = currentFoodBox.GetFoodSprite(); // Get the sprite of the collected food
             if (foodSprite != null)
             {
-                Debug.Log($"Collected item: {foodName}"); // Log the collected food item
+                // Debug.Log($"Collected item: {foodName}"); 
 
                 playerItemDisplay?.SetIconSprite(foodSprite); // Set the sprite in PlayerItemDisplay
                 playerItemDisplay?.ShowPickupIcon(); // Show the sprite icon
@@ -117,17 +118,18 @@ public class PlayerObjectDetection : MonoBehaviour
                 playerItemDisplay?.ClearIconSprite();
             }
         }
-        else if (currentCookingWare != null && !hasCollectedItem && currentCookingWare.getCompleteProcess())
-        {
-            Sprite foodSprite = currentCookingWare.GetFoodSprite();
-            inventory.Add(foodName);
-            Debug.Log($"Inventory: {string.Join(", ", inventory)}");
-            currentCookingWare.takeCookinWareItem();
+        // else if (currentCookingWare != null && !hasCollectedItem && currentCookingWare.getCompleteProcess())
+        // {
+        //     Sprite foodSprite = currentCookingWare.GetFoodSprite();
+        //     inventory.Add(foodName);
+        //     Debug.Log($"Inventory: {string.Join(", ", inventory)}");
+        //     print("current food sprite :" + foodSprite);
+        //     currentCookingWare.takeCookinWareItem();
 
-            playerItemDisplay.SetIconSprite(foodSprite);
-            playerItemDisplay.ShowPickupIcon();
+        //     playerItemDisplay.SetIconSprite(foodSprite);
+        //     playerItemDisplay.ShowPickupIcon();
 
-        }
+        // }
         else
         {
             Debug.LogWarning("You need to collect an item before processing.");

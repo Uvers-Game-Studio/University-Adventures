@@ -24,7 +24,7 @@ public class PlayerItemDisplay : MonoBehaviour
         {
             ClearIconSprite();
             pickupIcon.gameObject.SetActive(true);  
-            pickupIcon.sprite = newSprite; // Update the sprite
+            pickupIcon.sprite = newSprite; 
         }
     }
 

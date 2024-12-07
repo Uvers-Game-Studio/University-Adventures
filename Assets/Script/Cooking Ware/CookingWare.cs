@@ -15,7 +15,7 @@ public class CookingWare : MonoBehaviour
 
     private void Start()
     {
-        playerObjectDetection = GameObject.Find("Character").GetComponent<PlayerObjectDetection>();
+        playerObjectDetection = GameObject.Find("Player").GetComponent<PlayerObjectDetection>();
         cookingWareCanvas = GetComponentInChildren<Canvas>();
 
         if (cookingWareCanvas != null)
