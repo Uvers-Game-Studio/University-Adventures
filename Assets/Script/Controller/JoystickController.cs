@@ -9,11 +9,11 @@ public class JoystickController : MonoBehaviour {
     public Joystick movementJoystick;  // Reference to the joystick
     public float playerSpeed = 2f;     // Speed of the player
     private Rigidbody2D rb;            // Rigidbody for movement
-    // private Animator animator;         
+    private Animator animator;         
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
-        // animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate() {
@@ -28,11 +28,11 @@ public class JoystickController : MonoBehaviour {
 
             FaceDirection(movement);
 
-            // PlayAnimation("isWalking", true);
+            animator.SetBool("isWalking", true);
         } else {
             rb.velocity = Vector2.zero;
 
-            // PlayAnimation("isWalking", false);
+            animator.SetBool("isWalking", false);
         }
     }
 

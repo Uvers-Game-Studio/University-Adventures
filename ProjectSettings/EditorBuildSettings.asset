@@ -5,10 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Mainmenu.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PindahScene.unity
     guid: 7530d5e002e40ab40a6d4fdbb53ffb7f
+  - enabled: 1
+    path: Assets/Scenes/DeniOutdoor.unity
+    guid: 8e1ea0ef579410f4684b209db6765ae1
+  - enabled: 1
+    path: Assets/Scenes/DeniLobby1.unity
+    guid: 56efb1ebd48156149affbae6919abe6a
+  - enabled: 1
+    path: Assets/Scenes/DeniLobby2.unity
+    guid: 8fc2b268d65e6e8439d5b6631a0cf2f2
+  - enabled: 1
+    path: Assets/Scenes/DeniKitchen.unity
+    guid: 42910f8eb82fb7d4683058a4553f737a
+  - enabled: 1
+    path: Assets/Scenes/DeniCanteen2.unity
+    guid: adcb1f562db2e844d97c1cf37a082734
   m_configObjects: {}
