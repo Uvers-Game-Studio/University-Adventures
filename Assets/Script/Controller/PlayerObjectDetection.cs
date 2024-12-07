@@ -118,18 +118,16 @@ public class PlayerObjectDetection : MonoBehaviour
                 playerItemDisplay?.ClearIconSprite();
             }
         }
-        // else if (currentCookingWare != null && !hasCollectedItem && currentCookingWare.getCompleteProcess())
-        // {
-        //     Sprite foodSprite = currentCookingWare.GetFoodSprite();
-        //     inventory.Add(foodName);
-        //     Debug.Log($"Inventory: {string.Join(", ", inventory)}");
-        //     print("current food sprite :" + foodSprite);
-        //     currentCookingWare.takeCookinWareItem();
-
-        //     playerItemDisplay.SetIconSprite(foodSprite);
-        //     playerItemDisplay.ShowPickupIcon();
-
-        // }
+        else if (currentCookingWare != null && !hasCollectedItem && currentCookingWare.getCompleteProcess())
+        {
+            Sprite foodSprite = currentCookingWare.GetFoodSprite();
+            inventory.Add(foodName);
+            Debug.Log($"Inventory: {string.Join(", ", inventory)}");
+            print("current food sprite :" + foodSprite);
+            currentCookingWare.takeCookinWareItem();
+            playerItemDisplay.SetIconSprite(foodSprite);
+            playerItemDisplay.ShowPickupIcon();
+        }
         else
         {
             Debug.LogWarning("You need to collect an item before processing.");
