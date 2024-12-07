@@ -56,7 +56,6 @@ public class CookingWare : MonoBehaviour
             canvasImage.gameObject.SetActive(false);
             canvasImage.sprite = foodSprite;
             StartCoroutine(RunSlider(3.0f)); // Example duration
-            completeProcess = true;
         }
     }
 
@@ -82,6 +81,8 @@ public class CookingWare : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         canvasSlider.gameObject.SetActive(false);
         canvasImage.gameObject.SetActive(true);
+        completeProcess = true;
+
     }
 
     public bool getCompleteProcess()
